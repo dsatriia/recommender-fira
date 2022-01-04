@@ -560,7 +560,7 @@ def main():
 # 						)
 # 						dframe = load_data("datascraptest.csv")
 # 						st.dataframe(dframe.head(10))
-# 				else:
+				else:
 # 					st.error("Please update the ad first.")
 					
 # 				if isSearched == True:
@@ -572,14 +572,14 @@ def main():
 					pic1 = Image.open("templateexample.jpg")
 					st.image(pic1, caption="example")
 					education_section = st.text_area('Education Section:',education_value,200)
-					
+
 					experience_value =" "		
 					experience_section = st.text_area('Experience Section:',experience_value,200)
-					
+
 
 					skill_value =" "
 					skill_section = st.text_area('Skill Section:',skill_value,200)
-					
+
 					if st.button("Update Data"):
 						cv_desc_value = "Education Section: " + education_section + ", " + "Experience Section: " + experience_section + ", " + "Skills Section: " + skill_section
 						st.warning(cv_desc_value)
