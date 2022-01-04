@@ -375,98 +375,71 @@ def main():
 					st.session_state.isSearched = True
 					isSearched = st.session_state.isSearched
 
-				st.subheader("Filter Job")
+# 				st.subheader("Filter Job")
 
-				if isSearched == True:
-					filter_jobtype = [
-						None,
-						TypeFilters.FULL_TIME,
-						TypeFilters.PART_TIME,
-						TypeFilters.TEMPORARY,
-						TypeFilters.CONTRACT,
-					]
-					jobtype = st.selectbox("Job_Type", filter_jobtype)
-					
-					filter_time = [
-						None,
-						TimeFilters.DAY,
-						TimeFilters.WEEK,
-						TimeFilters.MONTH,
-						TimeFilters.ANY,
-					]
-					time_iklan = st.selectbox("Date Posted", filter_time)
-
-# 					filter_actively_recruiting = [
+# 				if isSearched == True:
+# 					filter_jobtype = [
 # 						None,
-# 						"Yes",
-# 						"No"
+# 						TypeFilters.FULL_TIME,
+# 						TypeFilters.PART_TIME,
+# 						TypeFilters.TEMPORARY,
+# 						TypeFilters.CONTRACT,
 # 					]
-# 					selected_filter_actively_recruiting = st.selectbox("Actively Recruiting", filter_actively_recruiting)
+# 					jobtype = st.selectbox("Job_Type", filter_jobtype)
+					
+# 					filter_time = [
+# 						None,
+# 						TimeFilters.DAY,
+# 						TimeFilters.WEEK,
+# 						TimeFilters.MONTH,
+# 						TimeFilters.ANY,
+# 					]
+# 					time_iklan = st.selectbox("Date Posted", filter_time)
 
-					if st.button("Perbarui Iklan"):  #jika tidak ada iklan yg dicari maka akan menampilkan iklan yang direkomendasikan/mungkin kita interest
-						id = []
-						post_title = []
-						company_name = []
-						post_date = []
-						job_location = []
-						job_des = []
-						link = []
-# 						total_employees = []
-# 						actively_recruiting = []
+# # 					filter_actively_recruiting = [
+# # 						None,
+# # 						"Yes",
+# # 						"No"
+# # 					]
+# # 					selected_filter_actively_recruiting = st.selectbox("Actively Recruiting", filter_actively_recruiting)
+
+# 					if st.button("Perbarui Iklan"):  #jika tidak ada iklan yg dicari maka akan menampilkan iklan yang direkomendasikan/mungkin kita interest
+# 						id = []
+# 						post_title = []
+# 						company_name = []
+# 						post_date = []
+# 						job_location = []
+# 						job_des = []
+# 						link = []
+# # 						total_employees = []
+# # 						actively_recruiting = []
 						
-						# Fungsi len() digunakan untuk mengetahui panjang (jumlah item atau anggota) dari objek
-						total_countries = len(countries)				
-						if total_countries == 0:
-							st.error("Please select at least one country.")
-							return
-						if total_countries > jum :  #minimal 1 negara 1 iklan yg dicari. misal 4 negara input dengan pencarian 3 maka muncul warning
-							st.warning("The number of countries entered is more than the number of desired ads.")
+# 						# Fungsi len() digunakan untuk mengetahui panjang (jumlah item atau anggota) dari objek
+# 						total_countries = len(countries)				
+# 						if total_countries == 0:
+# 							st.error("Please select at least one country.")
+# 							return
+# 						if total_countries > jum :  #minimal 1 negara 1 iklan yg dicari. misal 4 negara input dengan pencarian 3 maka muncul warning
+# 							st.warning("The number of countries entered is more than the number of desired ads.")
 						
-						for i in range(total_countries):
-							temp = int(jum/total_countries)
-							iterate_number.append(temp)
+# 						for i in range(total_countries):
+# 							temp = int(jum/total_countries)
+# 							iterate_number.append(temp)
 
-						sisa = jum%total_countries
+# 						sisa = jum%total_countries
 
-						for i in range(sisa):
-							iterate_number[i] += 1
+# 						for i in range(sisa):
+# 							iterate_number[i] += 1
 											
-						for i in range(len(iterate_number)):
+# 						for i in range(len(iterate_number)):
 							
-							try:
-								# Change root logger level (default is WARN)
-								logging.basicConfig(level=logging.INFO)	
+# 							try:
+# 								# Change root logger level (default is WARN)
+# 								logging.basicConfig(level=logging.INFO)	
 
-								def on_data(data: EventData):
+# 								def on_data(data: EventData):
 									
-# 									if selected_filter_actively_recruiting == None:
-										post_title.append(
-											translator.translate(
-												data.title, lang_src="auto", lang_tgt="en"
-											)
-										)
-										# 								post_title.append(data.title)
-										id_job = len(post_title)
-										id.append(id_job)
-										job_location.append(data.place)
-										company_name.append(
-											translator.translate(
-												data.company, lang_src="auto", lang_tgt="en"
-											)
-										)
-										# 								company_name.append(data.company)
-										post_date.append(data.date)
-										job_des.append(
-											translator.translate(
-												data.description, lang_src="auto", lang_tgt="en"
-											)
-										)
-										# 								job_des.append(data.description)
-										link.append(data.link)
-# 										total_employees.append(data.total_employees)
-# 										actively_recruiting.append(data.actively_recruiting)
-									
-# 									elif data.actively_recruiting == selected_filter_actively_recruiting:
+# # 									if selected_filter_actively_recruiting == None:
 # 										post_title.append(
 # 											translator.translate(
 # 												data.title, lang_src="auto", lang_tgt="en"
@@ -492,79 +465,106 @@ def main():
 # 										link.append(data.link)
 # # 										total_employees.append(data.total_employees)
 # # 										actively_recruiting.append(data.actively_recruiting)
+									
+# # 									elif data.actively_recruiting == selected_filter_actively_recruiting:
+# # 										post_title.append(
+# # 											translator.translate(
+# # 												data.title, lang_src="auto", lang_tgt="en"
+# # 											)
+# # 										)
+# # 										# 								post_title.append(data.title)
+# # 										id_job = len(post_title)
+# # 										id.append(id_job)
+# # 										job_location.append(data.place)
+# # 										company_name.append(
+# # 											translator.translate(
+# # 												data.company, lang_src="auto", lang_tgt="en"
+# # 											)
+# # 										)
+# # 										# 								company_name.append(data.company)
+# # 										post_date.append(data.date)
+# # 										job_des.append(
+# # 											translator.translate(
+# # 												data.description, lang_src="auto", lang_tgt="en"
+# # 											)
+# # 										)
+# # 										# 								job_des.append(data.description)
+# # 										link.append(data.link)
+# # # 										total_employees.append(data.total_employees)
+# # # 										actively_recruiting.append(data.actively_recruiting)
 
-								def on_error(error):
-									print("[ON_ERROR]", error)
+# 								def on_error(error):
+# 									print("[ON_ERROR]", error)
 
-								def on_end():
-									print("[ON_END]")
+# 								def on_end():
+# 									print("[ON_END]")
 
-								scraper = LinkedinScraper(
-									# Custom Chrome executable path (e.g. /foo/bar/bin/chromedriver)
-									chrome_executable_path="chromedriver",
-									chrome_options=None,  # Custom Chrome options here
-									headless=True,  # Overrides headless mode only if chrome_options is None
-									# How many threads will be spawned to run queries concurrently (one Chrome driver for each thread)
-									max_workers=1,
-									# Slow down the scraper to avoid 'Too many requests (429)' errors
-									slow_mo=1,
-								)
+# 								scraper = LinkedinScraper(
+# 									# Custom Chrome executable path (e.g. /foo/bar/bin/chromedriver)
+# 									chrome_executable_path="chromedriver",
+# 									chrome_options=None,  # Custom Chrome options here
+# 									headless=True,  # Overrides headless mode only if chrome_options is None
+# 									# How many threads will be spawned to run queries concurrently (one Chrome driver for each thread)
+# 									max_workers=1,
+# 									# Slow down the scraper to avoid 'Too many requests (429)' errors
+# 									slow_mo=1,
+# 								)
 
-								# Add event listeners
-								scraper.on(Events.DATA, on_data)
-								scraper.on(Events.ERROR, on_error)
-								scraper.on(Events.END, on_end)
+# 								# Add event listeners
+# 								scraper.on(Events.DATA, on_data)
+# 								scraper.on(Events.ERROR, on_error)
+# 								scraper.on(Events.END, on_end)
 
-								queries = [
-									Query(
-										query=job_title,
-										options=QueryOptions(
-											locations=countries[i],
-											optimize=False,
-											limit=int(iterate_number[i]),
-											filters=QueryFilters(										
-												relevance=RelevanceFilters.RECENT,
-												type=jobtype,
-												time=time_iklan,
-											),
-										),
-									)
-								]
+# 								queries = [
+# 									Query(
+# 										query=job_title,
+# 										options=QueryOptions(
+# 											locations=countries[i],
+# 											optimize=False,
+# 											limit=int(iterate_number[i]),
+# 											filters=QueryFilters(										
+# 												relevance=RelevanceFilters.RECENT,
+# 												type=jobtype,
+# 												time=time_iklan,
+# 											),
+# 										),
+# 									)
+# 								]
 
-								scraper.run(queries)
+# 								scraper.run(queries)
 
-							except:
-								results = "Not Found"
+# 							except:
+# 								results = "Not Found"
 							
-						job_data = pd.DataFrame(
-							{
-								"Job_ID": id,
-								"Date": post_date,
-								"Company Name": company_name,							
-# 								"Total Employees": total_employees,
-# 								"Actively Recruiting": actively_recruiting,
-								"Job_Title": post_title,
-								"Location": job_location,
-								"Description": job_des,
-								"Link": link,
-							}
-						)
+# 						job_data = pd.DataFrame(
+# 							{
+# 								"Job_ID": id,
+# 								"Date": post_date,
+# 								"Company Name": company_name,							
+# # 								"Total Employees": total_employees,
+# # 								"Actively Recruiting": actively_recruiting,
+# 								"Job_Title": post_title,
+# 								"Location": job_location,
+# 								"Description": job_des,
+# 								"Link": link,
+# 							}
+# 						)
 
-						# cleaning description column
-						job_data["Description"] = job_data[
-							"Description"
-						].str.replace("\n", " ")
+# 						# cleaning description column
+# 						job_data["Description"] = job_data[
+# 							"Description"
+# 						].str.replace("\n", " ")
 
-						# print(job_data.info())
-						st.subheader("Data Hasil Scrap")
-						# job_data.head()
-						job_data.to_csv(
-							"datascraptest.csv", index=0, encoding="utf-8"
-						)
-						dframe = load_data("datascraptest.csv")
-						st.dataframe(dframe.head(10))
-				else:
-					st.error("Please update the ad first.")
+# 						# print(job_data.info())
+# 						st.subheader("Data Hasil Scrap")
+# 						# job_data.head()
+# 						job_data.to_csv(
+# 							"datascraptest.csv", index=0, encoding="utf-8"
+# 						)
+# 						dframe = load_data("datascraptest.csv")
+# 						st.dataframe(dframe.head(10))
+# 				else:
+# 					st.error("Please update the ad first.")
 					
 				if isSearched == True:
 					# st.subheader("CV Writing Guide")
