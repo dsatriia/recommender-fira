@@ -371,10 +371,7 @@ def main():
 					)
 					dframe = load_data("datascraptest.csv")
 					st.dataframe(dframe.head(10))
-				
-					st.session_state.isSearched = True
-					isSearched = st.session_state.isSearched
-
+									
 # 				st.subheader("Filter Job")
 
 # 				if isSearched == True:
@@ -566,7 +563,7 @@ def main():
 # 				else:
 # 					st.error("Please update the ad first.")
 					
-				if isSearched == True:
+# 				if isSearched == True:
 					# st.subheader("CV Writing Guide")
 					# image = Image.open("panduanedit.png")
 					# st.image(image, caption="Format CV")
