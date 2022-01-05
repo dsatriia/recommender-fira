@@ -258,8 +258,8 @@ def main():
 					job_location = []
 					job_des = []
 					link = []
-					total_employees = []
-					actively_recruiting = []
+# 					total_employees = []
+# 					actively_recruiting = []
 
 					for i in range(len(iterate_number)):
 											
@@ -1001,8 +1001,8 @@ def main():
 						job_location = []
 						job_des = []
 						link = []
-						total_employees = []
-						actively_recruiting = []
+# 						total_employees = []
+# 						actively_recruiting = []
 
 						for i in range(len(iterate_number)):
 
