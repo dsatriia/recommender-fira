@@ -203,7 +203,7 @@ def main():
 			
 			task = st.selectbox(
 # 				"Task", ["Recommend", "TemplateCV", "Download Data Hasil Scrap"])
-				"Menu", ["Recommend", "CV Template"])
+				"Menu", ["Recommend", "Detect", "CV Template"])
 
 			if task == "Recommend":
 				st.title("Job Recommender")
@@ -464,35 +464,7 @@ def main():
 										)
 										# 								job_des.append(data.description)
 										link.append(data.link)
-# 										total_employees.append(data.total_employees)
-# 										actively_recruiting.append(data.actively_recruiting)
-									
-# 									elif data.actively_recruiting == selected_filter_actively_recruiting:
-# 										post_title.append(
-# 											translator.translate(
-# 												data.title, lang_src="auto", lang_tgt="en"
-# 											)
-# 										)
-# 										# 								post_title.append(data.title)
-# 										id_job = len(post_title)
-# 										id.append(id_job)
-# 										job_location.append(data.place)
-# 										company_name.append(
-# 											translator.translate(
-# 												data.company, lang_src="auto", lang_tgt="en"
-# 											)
-# 										)
-# 										# 								company_name.append(data.company)
-# 										post_date.append(data.date)
-# 										job_des.append(
-# 											translator.translate(
-# 												data.description, lang_src="auto", lang_tgt="en"
-# 											)
-# 										)
-# 										# 								job_des.append(data.description)
-# 										link.append(data.link)
-# # 										total_employees.append(data.total_employees)
-# # 										actively_recruiting.append(data.actively_recruiting)
+
 
 								def on_error(error):
 									print("[ON_ERROR]", error)
@@ -607,26 +579,6 @@ def main():
 							writer.writeheader()
 							writer.writerows(rows)
 
-# 					st.subheader("Download CV ")		
-# 					if isCvDataUpdated == True:		
-# 						st.write("Click the button to download CV template")	
-
-# 						with open("templatecv.csv", "rb") as file:  #Read the file in Binary mode : untuk buka doc, biner : bahasa mesin. wb: untuk menulis
-
-# 							st.download_button(
-# 								label="Download",
-# 								data=file,
-# 								file_name="template.csv",
-# 								mime="text/csv",
-# 							)				
-
-# 					else:
-# 						st.error("Please update CV data first.")
-			
-# 				st.subheader(
-# 					"Upload CV to Find Job Ad Recommendations")
-# 				# st.write(st.session_state.isSearched)
-# 				if isSearched == True:
 					jumlah = st.number_input(
 						"Input Banyak Iklan yang ingin Ditampilkan", 2, 100, 3
 					)  # mulai,max,default
@@ -815,6 +767,227 @@ def main():
 							results = "Not Found"
 				else:
 					st.error("Please update the ad first.")
+
+			elif task == "Detect":
+				st.subheader("Update CV Data")		
+				education_value =""		
+				pic1 = Image.open("templateexample.jpg")
+				st.image(pic1, caption="example")
+				education_section = st.text_area('Education Section:',education_value,200)
+			
+				experience_value =" "		
+				experience_section = st.text_area('Experience Section:',experience_value,500)
+				
+				skill_value =" "
+				skill_section = st.text_area('Skill Section:',skill_value,200)
+				
+				if st.button("Update Data"):
+					cv_desc_value = "Education Section: " + education_section + ", " + "Experience Section: " + experience_section + ", " + "Skills Section: " + skill_section
+					st.warning(cv_desc_value)
+
+					st.success("CV Data Updated!")
+					cv_desc_value = "Education Section: " + education_section + ", " + "Experience Section: " + experience_section + ", " + "Skills Section: " + skill_section
+					# csv header
+					fieldnames = ['cv_desc']
+
+					# csv data
+					rows = [
+						{'cv_desc': cv_desc_value}
+					]
+
+					with open('templatecv.csv', 'w', encoding='UTF8', newline='') as f:
+						writer = csv.DictWriter(f, fieldnames=fieldnames)
+						writer.writeheader()
+						writer.writerows(rows)
+					
+				jumlah = st.number_input(
+					"Input Banyak Iklan yang ingin Ditampilkan", 2, 100, 3
+				)  # mulai,max,default
+				if st.button("Temukan Iklan yang Cocok"):
+					try:
+
+						def remove_punc(text):
+							symbols = (
+								r"â€¢!\"#$%&()*+-.,/:;<=>?@[\]^_`'{|}~\\0123456789"
+							)
+							output = [
+								char for char in text if char not in symbols]
+							return "".join(output)
+
+						def stemSentence(tokens):
+							# token_words=word_tokenize(text)
+
+							porter = PorterStemmer()
+							stem_sentence = []
+							for word in tokens:
+								stem_sentence.append(porter.stem(word))
+							return stem_sentence
+
+						def lemmatization(tokens):
+							lemmatizer = WordNetLemmatizer()
+							return [lemmatizer.lemmatize(word) for word in tokens]
+
+						def stopwordSentence(tokens):
+							return [
+								word for word in tokens if word not in stop_words
+							]
+
+						def caseFold(text):
+							return text.lower()
+
+						def preProcessPipeline(text, print_output=False):
+							if print_output:
+								print("Teks awal:")
+								print(text)
+							text = remove_punc(text)
+							if print_output:
+								print("Setelah menghilangkan tanda baca:")
+								print(text)
+
+							text = caseFold(text)
+							if print_output:
+								print("Setelah Casefold")
+								print(text)
+
+							token_words = word_tokenize(text)
+							token_words = lemmatization(token_words)
+							if print_output:
+								print("Setelah lemmatization:")
+								print(" ".join(token_words))
+
+							token_words = stopwordSentence(token_words)
+							if print_output:
+								print("Setelah menghilangkan stopwords:")
+								print(" ".join(token_words))
+
+							return " ".join(token_words)
+
+						documents_train = pd.read_csv(
+							"datascraptest.csv", error_bad_lines=False
+						)
+						train_text = documents_train["Description"].apply(
+							preProcessPipeline
+						)
+						documents_test = pd.read_csv(
+							"templatecv.csv", error_bad_lines=False)
+						test_text = documents_test["cv_desc"].apply(
+							preProcessPipeline
+						)
+
+						nltk_tokens = [nltk.word_tokenize(
+							i) for i in train_text]
+						y = nltk_tokens
+
+						dictionary = gensim.corpora.Dictionary(y)
+						text = y
+
+						corpus = [dictionary.doc2bow(i) for i in text]
+						tfidf = gensim.models.TfidfModel(
+							corpus, smartirs="npu")
+						corpus_tfidf = tfidf[corpus]
+
+						#bmemilih num_topics optimal sesuai topic coherence
+						num_topics = list(range(1,10))
+						coherence_scores = []
+
+						for i in num_topics:
+							lsa_model = LsiModel(corpus=corpus, num_topics=i, id2word = dictionary)
+							coherence_model = CoherenceModel(model=lsa_model, texts=y, dictionary=dictionary, coherence='c_v')
+							coherence_lsa = coherence_model.get_coherence()
+
+							coherence_scores.append(coherence_lsa)
+						
+# 							for m, cv in zip(num_topics, coherence_scores):
+#     								st.write("Num Topics =", m, "has Coherence Value of", round(cv, 3))
+						#short paling besar input ke num_topics=bigest
+
+						#mengambil nilai dalam array
+						max_Coherence = np.argmax(coherence_scores)
+						
+# 							st.write("numb of topic:",max_Coherence)
+# 							st.write("best coherence score:",coherence_scores[max_Coherence])
+
+						lsi_model = LsiModel(
+							corpus=corpus_tfidf, id2word=dictionary, num_topics=max_Coherence
+						)
+						print(
+							"Derivation of Term Matrix T of Training Document Word Stems: ",
+							lsi_model.get_topics(),
+						)
+						# Derivation of Term Document Matrix of Training Document Word Stems = M' x [Derivation of T]
+						print(
+							"LSI Vectors of Training Document Word Stems: ",
+							[
+								lsi_model[document_word_stems]
+								for document_word_stems in corpus
+							],
+						)
+						cosine_similarity_matrix = similarities.MatrixSimilarity(
+							lsi_model[corpus]
+						)
+
+						word_tokenizer = nltk.tokenize.WordPunctTokenizer()
+						words = word_tokenizer.tokenize(test_text[0])
+
+						vector_lsi_test = lsi_model[dictionary.doc2bow(
+							words)]
+
+						cosine_similarities_test = cosine_similarity_matrix[
+							vector_lsi_test
+						]
+					
+						most_similar_document_test = train_text[
+							np.argmax(cosine_similarities_test)
+						]
+													
+						#Mengubah nilai cosine float ke persentase
+						cst1 = cosine_similarities_test*int(100)
+						cst = cst1.astype(int)
+
+						cst_terurut = sorted(
+							cosine_similarities_test, reverse=True)
+
+						iklan = cosine_similarities_test.argsort(
+						)[-jumlah:][::-1]
+
+						def generator_cosines(iklan):
+							for i in iklan:
+								yield i
+
+						# print data awal di csv
+						for i in iklan:
+							st.write(
+								"Similarity Level Between CV and Ads :", f"{cst[i]}","%"
+							)
+							st.write(
+								"Post Date :", f"{documents_train['Date'][i]}\n"
+							)
+							st.write(
+								"Company Name :",
+								f"{documents_train['Company Name'][i]}\n",
+							)
+							st.write(
+								"Job Title :",
+								f"{documents_train['Job_Title'][i]}\n",
+							)
+							st.write(
+								"Job Description :",
+								f"{documents_train['Description'][i]}\n",
+							)
+							st.write(
+								"Job Location :", f"{documents_train['Location'][i]}\n"
+							)
+							st.write(
+								"Link Ads :",
+								f"{documents_train['Link'][i]}\n",
+							)
+				
+							st.markdown("""---""")
+
+					except:
+						results = "Not Found"
+				
+
 
 			elif task == "CV Template":
 				st.subheader("Download CV ")
@@ -1137,13 +1310,6 @@ def main():
 						]
 						time_iklan = st.selectbox("Date Posted", filter_time)
 
-	# 					filter_actively_recruiting = [
-	# 						None,
-	# 						"Yes",
-	# 						"No"
-	# 					]
-	# 					selected_filter_actively_recruiting = st.selectbox("Actively Recruiting", filter_actively_recruiting)
-
 						if st.button("Perbarui Iklan"):
 							id = []
 							post_title = []
@@ -1152,8 +1318,6 @@ def main():
 							job_location = []
 							job_des = []
 							link = []
-	# 						total_employees = []
-	# 						actively_recruiting = []
 
 							total_countries = len(countries)				
 							if total_countries == 0:
@@ -1204,35 +1368,7 @@ def main():
 											)
 											# 								job_des.append(data.description)
 											link.append(data.link)
-	# 										total_employees.append(data.total_employees)
-	# 										actively_recruiting.append(data.actively_recruiting)
 
-	# 									elif data.actively_recruiting == selected_filter_actively_recruiting:
-	# 										post_title.append(
-	# 											translator.translate(
-	# 												data.title, lang_src="auto", lang_tgt="en"
-	# 											)
-	# 										)
-	# 										# 								post_title.append(data.title)
-	# 										id_job = len(post_title)
-	# 										id.append(id_job)
-	# 										job_location.append(data.place)
-	# 										company_name.append(
-	# 											translator.translate(
-	# 												data.company, lang_src="auto", lang_tgt="en"
-	# 											)
-	# 										)
-	# 										# 								company_name.append(data.company)
-	# 										post_date.append(data.date)
-	# 										job_des.append(
-	# 											translator.translate(
-	# 												data.description, lang_src="auto", lang_tgt="en"
-	# 											)
-	# 										)
-	# 										# 								job_des.append(data.description)
-	# 										link.append(data.link)
-	# # 										total_employees.append(data.total_employees)
-	# # 										actively_recruiting.append(data.actively_recruiting)
 
 									def on_error(error):
 										print("[ON_ERROR]", error)
