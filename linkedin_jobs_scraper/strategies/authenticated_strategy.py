@@ -36,7 +36,7 @@ class Selectors(NamedTuple):
     pagination = '.jobs-search-two-pane__pagination'
     paginationNextBtn = 'li[data-test-pagination-page-btn].selected + li'
     paginationBtn = lambda index: f'li[data-test-pagination-page-btn="{index}"] button'
-#     totalEmployees = '.jobs-unified-top-card'
+    totalEmployees = '.jobs-unified-top-card'
 #     activelyRecruiting = '.jobs-unified-top-card'
     
 
@@ -332,19 +332,19 @@ class AuthenticatedStrategy(Strategy):
                         Selectors.description)
 
                     # Extract
-#                     debug(tag, 'Evaluating selectors', [Selectors.totalEmployees])
+                    debug(tag, 'Evaluating selectors', [Selectors.totalEmployees])
 
-# #                     company_total_employees, company_total_employees_html = driver.execute_script(
-# #                         '''
-# #                             const el = document.querySelector(arguments[0]);
-# #                             let el2 = el.children[1].children[2].children[1];
+#                     company_total_employees, company_total_employees_html = driver.execute_script(
+#                         '''
+#                             const el = document.querySelector(arguments[0]);
+#                             let el2 = el.children[1].children[2].children[1];
 
-# #                             return [
-# #                                 el2.innerText,
-# #                                 el2.outerHTML    
-# #                             ];
-# #                         ''',
-# #                         Selectors.totalEmployees)
+#                             return [
+#                                 el2.innerText,
+#                                 el2.outerHTML    
+#                             ];
+#                         ''',
+#                         Selectors.totalEmployees)
                     
                      # Extract
 #                     debug(tag, 'Evaluating selectors', [Selectors.activelyRecruiting])
@@ -428,7 +428,7 @@ class AuthenticatedStrategy(Strategy):
                     job_function=job_function,
                     employment_type=job_employment_type,
                     industries=job_industries)
-#                     total_employees=company_total_employees,
+                    total_employees=company_total_employees,
 #                     actively_recruiting=actively_recruiting)
 
                 info(tag, 'Processed')
