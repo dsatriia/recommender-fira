@@ -3,7 +3,7 @@ import logging
 
 
 class Config:
-    os.environ["LI_AT_COOKIE"] = "AQEDAThq-1kBTw9TAAABfkeUSYUAAAF-a6DNhU0AdfqBfk4ZDda1-GHWbCTIfOAcG62IDkpZmCBdb9psVVy9Ht3m-mUzYs5sVhIJ3Npe518E7-d5UTuuBhqKhawOfOmQviVPdRjLEhUY1GqadvLyxEHc"
+    os.environ["LI_AT_COOKIE"] = "AQEDAThq-1kB7t76AAABfklmtJ4AAAF-bXM4nlYAu_N5vZZJeYOH-QBSoFzAEIxXaFKCLS9FOHAG_07yzBKyD28nMhq8J0V49U4h5Aw_7w3FFAgDcOQDf4WhN02l8xG1_nktgMj28hHRGcQ9xpSscQed"
     LI_AT_COOKIE = os.environ['LI_AT_COOKIE'] if 'LI_AT_COOKIE' in os.environ else None
     print("debug baru")
     print(os.environ['LI_AT_COOKIE'])
