@@ -332,7 +332,7 @@ class AuthenticatedStrategy(Strategy):
                         Selectors.description)
 
                     # Extract
-                    debug(tag, 'Evaluating selectors', [Selectors.totalEmployees])
+#                     debug(tag, 'Evaluating selectors', [Selectors.totalEmployees])
 
 #                     company_total_employees, company_total_employees_html = driver.execute_script(
 #                         '''
@@ -429,7 +429,7 @@ class AuthenticatedStrategy(Strategy):
                     employment_type=job_employment_type,
                     industries=job_industries,
 #                     total_employees=company_total_employees,
-                    actively_recruiting=actively_recruiting)
+#                     actively_recruiting=actively_recruiting)
 
                 info(tag, 'Processed')
 
