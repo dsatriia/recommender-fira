@@ -36,8 +36,8 @@ class Selectors(NamedTuple):
     pagination = '.jobs-search-two-pane__pagination'
     paginationNextBtn = 'li[data-test-pagination-page-btn].selected + li'
     paginationBtn = lambda index: f'li[data-test-pagination-page-btn="{index}"] button'
-    totalEmployees = '.jobs-unified-top-card'
-#     activelyRecruiting = '.jobs-unified-top-card'
+#     totalEmployees = '.jobs-unified-top-card'
+    activelyRecruiting = '.jobs-unified-top-card'
     
 
 
@@ -347,25 +347,25 @@ class AuthenticatedStrategy(Strategy):
 #                         Selectors.totalEmployees)
                     
                      # Extract
-#                     debug(tag, 'Evaluating selectors', [Selectors.activelyRecruiting])
+                    debug(tag, 'Evaluating selectors', [Selectors.activelyRecruiting])
 
-#                     actively_recruiting, actively_recruiting_html = driver.execute_script(
-#                         '''
-#                             const el = document.querySelector(arguments[0]);
-#                             let el2 = el.children[1].children[2].children[3];
+                    actively_recruiting, actively_recruiting_html = driver.execute_script(
+                        '''
+                            const el = document.querySelector(arguments[0]);
+                            let el2 = el.children[1].children[2].children[3];
                             
-#                             let isActive = 'No';
+                            let isActive = 'No';
 
-#                             if (el2.innerText.includes("Actively recruiting")) {
-#                                 isActive = 'Yes';
-#                             }
+                            if (el2.innerText.includes("Actively recruiting")) {
+                                isActive = 'Yes';
+                            }
 
-#                             return [
-#                                 isActive,
-#                                 el2.outerHTML    
-#                             ];
-#                         ''',
-#                         Selectors.activelyRecruiting)
+                            return [
+                                isActive,
+                                el2.outerHTML    
+                            ];
+                        ''',
+                        Selectors.activelyRecruiting)
 
                     # TODO how to extract apply link?
 
@@ -427,9 +427,9 @@ class AuthenticatedStrategy(Strategy):
                     seniority_level=job_seniority_level,
                     job_function=job_function,
                     employment_type=job_employment_type,
-                    industries=job_industries)
-                    total_employees=company_total_employees,
-#                     actively_recruiting=actively_recruiting)
+                    industries=job_industries,
+#                     total_employees=company_total_employees,
+                    actively_recruiting=actively_recruiting)
 
                 info(tag, 'Processed')
 
