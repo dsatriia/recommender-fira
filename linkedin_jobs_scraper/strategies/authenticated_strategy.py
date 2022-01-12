@@ -36,8 +36,8 @@ class Selectors(NamedTuple):
     pagination = '.jobs-search-two-pane__pagination'
     paginationNextBtn = 'li[data-test-pagination-page-btn].selected + li'
     paginationBtn = lambda index: f'li[data-test-pagination-page-btn="{index}"] button'
-#     totalEmployees = '.jobs-unified-top-card'
-#     activelyRecruiting = '.jobs-unified-top-card'
+    totalEmployees = '.jobs-unified-top-card'
+    activelyRecruiting = '.jobs-unified-top-card'
     
 
 
@@ -133,6 +133,7 @@ class AuthenticatedStrategy(Strategy):
         :param tag:
         :return:
         """
+
         try:
             driver.execute_script(
                 '''
@@ -427,8 +428,8 @@ class AuthenticatedStrategy(Strategy):
                     job_function=job_function,
                     employment_type=job_employment_type,
                     industries=job_industries,
-#                     total_employees=company_total_employees,
-#                     actively_recruiting=actively_recruiting)
+                    total_employees=company_total_employees,
+                    actively_recruiting=actively_recruiting)
 
                 info(tag, 'Processed')
 
