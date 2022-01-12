@@ -347,25 +347,25 @@ class AuthenticatedStrategy(Strategy):
 #                         Selectors.totalEmployees)
                     
                      # Extract
-#                     debug(tag, 'Evaluating selectors', [Selectors.activelyRecruiting])
+                    debug(tag, 'Evaluating selectors', [Selectors.activelyRecruiting])
 
-#                     actively_recruiting, actively_recruiting_html = driver.execute_script(
-#                         '''
-#                             const el = document.querySelector(arguments[0]);
-#                             let el2 = el.children[1].children[2].children[3];
+                    actively_recruiting, actively_recruiting_html = driver.execute_script(
+                        '''
+                            const el = document.querySelector(arguments[0]);
+                            let el2 = el.children[1].children[2].children[3];
                             
-#                             let isActive = 'No';
+                            let isActive = 'No';
 
-#                             if (el2.innerText.includes("Actively recruiting")) {
-#                                 isActive = 'Yes';
-#                             }
+                            if (el2.innerText.includes("Actively recruiting")) {
+                                isActive = 'Yes';
+                            }
 
-#                             return [
-#                                 isActive,
-#                                 el2.outerHTML    
-#                             ];
-#                         ''',
-# #                         Selectors.activelyRecruiting)
+                            return [
+                                isActive,
+                                el2.outerHTML    
+                            ];
+                        ''',
+                        Selectors.activelyRecruiting)
 
                     # TODO how to extract apply link?
 
