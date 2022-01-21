@@ -427,9 +427,9 @@ class AuthenticatedStrategy(Strategy):
                     seniority_level=job_seniority_level,
                     job_function=job_function,
                     employment_type=job_employment_type,
-                    industries=job_industries,
-                    total_employees=company_total_employees,
-                    actively_recruiting=actively_recruiting)
+                    industries=job_industries)
+#                     total_employees=company_total_employees,
+#                     actively_recruiting=actively_recruiting)
 
                 info(tag, 'Processed')
 
