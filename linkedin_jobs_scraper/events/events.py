@@ -26,5 +26,5 @@ class EventData(NamedTuple):
     job_function: str = ''
     employment_type: str = ''
     industries: str = ''
-    total_employees: str = ''
-    actively_recruiting: str = ''
+#     total_employees: str = ''
+#     actively_recruiting: str = ''
