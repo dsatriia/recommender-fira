@@ -900,7 +900,7 @@ def main():
 						
 							for m, cv in zip(num_topics, coherence_scores):
     								st.write("Num Topics =", m, "has Coherence Value of", round(cv, 3))
-						short paling besar input ke num_topics=bigest
+# 						short paling besar input ke num_topics=bigest
 
 						#mengambil nilai dalam array
 						max_Coherence = np.argmax(coherence_scores)
