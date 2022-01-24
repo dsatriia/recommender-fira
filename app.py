@@ -905,7 +905,7 @@ def main():
 						#mengambil nilai dalam array
 						max_Coherence = np.argmax(coherence_scores)
 						
-							st.write("numb of topic:",max_Coherence)
+# 							st.write("numb of topic:",max_Coherence)
 							st.write("best coherence score:",coherence_scores[max_Coherence])
 
 						lsi_model = LsiModel(
