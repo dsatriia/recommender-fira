@@ -1,6 +1,6 @@
 import streamlit as st
 import os
-os.environ["LI_AT_COOKIE"] = "AQEDAThq-1kC6xHyAAABfm16NjcAAAF-kYa6N1YAduYb4BoizKqsc3xPx8uuTFrn4ksOhBm7PHiW_QX7DQrohR4lzldQz76ErhFeoj693LnFVSufsjCuMTb2mmJ4qm1Ok6h80eAwMxEVMQdxyuSUK2Gx"
+os.environ["LI_AT_COOKIE"] = "AQHw7IeH2qdFQQAAAXzpqfuaOh7AJL6e_n1tDAXPYtCMSn-LfxCS_4qgZUM8oUQV5qAxzUs_qOFsarPZAnB2ktWeAId6-Wxg9gTs3JVEqUeYI0W9QkUTAXOPNpXu_Z4uFD4tCWAu5FDTNnCwEOE1CXvOgM-WoXXOttp7uYbS7sOGRwK6eslnJvm5ddxKjm2qYoNBBvXJu_C-nhHcpMwPZTMWD_Rg0oM_sWejkYaKt95qju7_G3z2rtXEwPlcj4gNFjiuhqghJY86zdCRYwfLNy7hhJaYRyB7yOIld46WOTu-beQcX8JzSYgZa9gzNiZSRKIomByomvueKMMyfXA"
 
 #packages input cv 
 import csv #Dengan modul csv untuk beralih ke suatu baris dan mengaksesnya
