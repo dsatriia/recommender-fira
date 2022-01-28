@@ -667,7 +667,7 @@ def main():
 							corpus_tfidf = tfidf[corpus]
 
 							#bmemilih num_topics optimal sesuai topic coherence
-							num_topics = list(range(1,10))
+							num_topics = list(range(1,15))
 							coherence_scores = []
 
 							for i in num_topics:
@@ -888,7 +888,7 @@ def main():
 						corpus_tfidf = tfidf[corpus]
 
 						#bmemilih num_topics optimal sesuai topic coherence
-						num_topics = list(range(1,10))
+						num_topics = list(range(1,15))
 						coherence_scores = []
 
 						for i in num_topics:
