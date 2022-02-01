@@ -682,13 +682,13 @@ def main():
 							#short paling besar input ke num_topics=bigest
 
 							#mengambil nilai dalam array
-							max_Coherence = np.argmax(coherence_scores)
+# 							max_Coherence = np.argmax(coherence_scores)
 							
 # 							st.write("numb of topic:",max_Coherence)
 # 							st.write("best coherence score:",coherence_scores[max_Coherence])
 
 							lsi_model = LsiModel(
-								corpus=corpus_tfidf, id2word=dictionary, num_topics=max_Coherence
+								corpus=corpus_tfidf, id2word=dictionary, num_topics=6
 							)
 							print(
 								"Derivation of Term Matrix T of Training Document Word Stems: ",
@@ -903,13 +903,13 @@ def main():
 # 						short paling besar input ke num_topics=bigest
 
 						#mengambil nilai dalam array
-							max_Coherence = np.argmax(coherence_scores)
+# 							max_Coherence = np.argmax(coherence_scores)
 
-							st.write("numb of topic:",max_Coherence)
-							st.write("best coherence score:",coherence_scores[max_Coherence])
+# 							st.write("numb of topic:",max_Coherence)
+# 							st.write("best coherence score:",coherence_scores[max_Coherence])
 
 						lsi_model = LsiModel(
-							corpus=corpus_tfidf, id2word=dictionary, num_topics=max_Coherence
+							corpus=corpus_tfidf, id2word=dictionary, num_topics=6
 						)
 						print(
 							"Derivation of Term Matrix T of Training Document Word Stems: ",
