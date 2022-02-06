@@ -1,6 +1,6 @@
 import streamlit as st
 import os
-os.environ["LI_AT_COOKIE"] = "AQEDATnUOO0Dc4zEAAABfsSWUIEAAAF-6KLUgU4AW5AIM3Sz6xWDl5-pPahj24qNQ_SLioHfQcFGkMWn6nAXc9Q13j1j4LuOnZAvyf3zas3tkwG3j66to5ofMC2HuAyDD-g5S26aaWEkB3kv7OHZMx1Q"
+os.environ["LI_AT_COOKIE"] = "AQEDAThq-1kAnAiEAAABfrqIoWkAAAF-3pUlaVYAIkwmkpPBV94WZto-u0oRT51UCe3As_AF6HjSt2ixjjZT5gXvKlfGu8_LSRoIPFrxWg93zfJJI3IpecLZBzbAf52ip3IN4xAQPyHTd6bwvjsMbbsW"
 
 #packages input cv 
 import csv #Dengan modul csv untuk beralih ke suatu baris dan mengaksesnya
@@ -770,36 +770,7 @@ def main():
 					st.error("Please update the ad first.")
 
 			elif task == "Detect":
-				st.subheader("Update CV Data")		
-				education_value =""		
-				pic1 = Image.open("templateexample.jpg")
-				st.image(pic1, caption="example")
-				education_section = st.text_area('Education Section:',education_value,200)
-			
-				experience_value =" "		
-				experience_section = st.text_area('Experience Section:',experience_value,500)
-				
-				skill_value =" "
-				skill_section = st.text_area('Skill Section:',skill_value,200)
-				
-				if st.button("Update Data"):
-					cv_desc_value = "Education Section: " + education_section + ", " + "Experience Section: " + experience_section + ", " + "Skills Section: " + skill_section
-					st.warning(cv_desc_value)
-
-					st.success("CV Data Updated!")
-					cv_desc_value = "Education Section: " + education_section + ", " + "Experience Section: " + experience_section + ", " + "Skills Section: " + skill_section
-					# csv header
-					fieldnames = ['cv_desc']
-
-					# csv data
-					rows = [
-						{'cv_desc': cv_desc_value}
-					]
-
-					with open('templatecv.csv', 'w', encoding='UTF8', newline='') as f:
-						writer = csv.DictWriter(f, fieldnames=fieldnames)
-						writer.writeheader()
-						writer.writerows(rows)
+				st.title("Detect")
 					
 				jumlah = st.number_input(
 					"Input Banyak Iklan yang ingin Ditampilkan", 2, 100, 3
@@ -888,24 +859,28 @@ def main():
 						corpus_tfidf = tfidf[corpus]
 
 						#bmemilih num_topics optimal sesuai topic coherence
-						num_topics = list(range(1,15))
+						
 						coherence_scores = []
+						# for loop 2 until 12
+						
 
-						for i in num_topics:
+						for i in range(2, 12):
+							
 							lsa_model = LsiModel(corpus=corpus, num_topics=i, id2word = dictionary)
 							coherence_model = CoherenceModel(model=lsa_model, texts=y, dictionary=dictionary, coherence='c_v')
 							coherence_lsa = coherence_model.get_coherence()
-
+							st.write(i)
+							st.write("coherence :",str(coherence_lsa))
 							coherence_scores.append(coherence_lsa)
 						
-							for m, cv in zip(num_topics, coherence_scores):
-    								st.write("Num Topics =", m, "has Coherence Value of", round(cv, 3))
+						# for m, cv in zip(num_topics, coherence_scores):
+						# 		st.write("Num Topics =", m, "has Coherence Value of", round(cv, 3))
 # 						short paling besar input ke num_topics=bigest
 
 						#mengambil nilai dalam array
-# 							max_Coherence = np.argmax(coherence_scores)
+						max_Coherence = np.argmax(coherence_scores)
 
-# 							st.write("numb of topic:",max_Coherence)
+						st.write("numb of topic:",max_Coherence)
 # 							st.write("best coherence score:",coherence_scores[max_Coherence])
 
 						lsi_model = LsiModel(
