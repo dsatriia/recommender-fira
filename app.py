@@ -670,12 +670,12 @@ def main():
 							num_topics = list(range(1,15))
 							coherence_scores = []
 
-							for i in num_topics:
-								lsa_model = LsiModel(corpus=corpus, num_topics=i, id2word = dictionary)
-								coherence_model = CoherenceModel(model=lsa_model, texts=y, dictionary=dictionary, coherence='c_v')
-								coherence_lsa = coherence_model.get_coherence()
+# 							for i in num_topics:
+# 								lsa_model = LsiModel(corpus=corpus, num_topics=i, id2word = dictionary)
+# 								coherence_model = CoherenceModel(model=lsa_model, texts=y, dictionary=dictionary, coherence='c_v')
+# 								coherence_lsa = coherence_model.get_coherence()
 
-								coherence_scores.append(coherence_lsa)
+# 								coherence_scores.append(coherence_lsa)
 							
 # 							for m, cv in zip(num_topics, coherence_scores):
 #     								st.write("Num Topics =", m, "has Coherence Value of", round(cv, 3))
@@ -688,7 +688,7 @@ def main():
 # 							st.write("best coherence score:",coherence_scores[max_Coherence])
 
 							lsi_model = LsiModel(
-								corpus=corpus_tfidf, id2word=dictionary, num_topics=6
+								corpus=corpus_tfidf, id2word=dictionary, num_topics=100
 							)
 							print(
 								"Derivation of Term Matrix T of Training Document Word Stems: ",
@@ -891,16 +891,16 @@ def main():
 						num_topics = list(range(1,15))
 						coherence_scores = []
 
-						for i in num_topics:
-							lsa_model = LsiModel(corpus=corpus, num_topics=i, id2word = dictionary)
-							coherence_model = CoherenceModel(model=lsa_model, texts=y, dictionary=dictionary, coherence='c_v')
-							coherence_lsa = coherence_model.get_coherence()
+# 						for i in num_topics:
+# 							lsa_model = LsiModel(corpus=corpus, num_topics=i, id2word = dictionary)
+# 							coherence_model = CoherenceModel(model=lsa_model, texts=y, dictionary=dictionary, coherence='c_v')
+# 							coherence_lsa = coherence_model.get_coherence()
 
-							coherence_scores.append(coherence_lsa)
+# 							coherence_scores.append(coherence_lsa)
 						
-							for m, cv in zip(num_topics, coherence_scores):
-    								st.write("Num Topics =", m, "has Coherence Value of", round(cv, 3))
-# 						short paling besar input ke num_topics=bigest
+# 							for m, cv in zip(num_topics, coherence_scores):
+#     								st.write("Num Topics =", m, "has Coherence Value of", round(cv, 3))
+# # 						short paling besar input ke num_topics=bigest
 
 						#mengambil nilai dalam array
 # 							max_Coherence = np.argmax(coherence_scores)
@@ -909,7 +909,7 @@ def main():
 # 							st.write("best coherence score:",coherence_scores[max_Coherence])
 
 						lsi_model = LsiModel(
-							corpus=corpus_tfidf, id2word=dictionary, num_topics=6
+							corpus=corpus_tfidf, id2word=dictionary, num_topics=100
 						)
 						print(
 							"Derivation of Term Matrix T of Training Document Word Stems: ",
