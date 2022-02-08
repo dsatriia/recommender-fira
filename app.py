@@ -688,7 +688,7 @@ def main():
 # 							st.write("best coherence score:",coherence_scores[max_Coherence])
 
 							lsi_model = LsiModel(
-								corpus=corpus_tfidf, id2word=dictionary, num_topics=100
+								corpus=corpus_tfidf, id2word=dictionary, num_topics=35
 							)
 							print(
 								"Derivation of Term Matrix T of Training Document Word Stems: ",
@@ -888,7 +888,7 @@ def main():
 						corpus_tfidf = tfidf[corpus]
 
 						#bmemilih num_topics optimal sesuai topic coherence
-						num_topics = list(range(1,15))
+						num_topics = list(range(1,35))
 						coherence_scores = []
 
 # 						for i in num_topics:
@@ -909,7 +909,7 @@ def main():
 # 							st.write("best coherence score:",coherence_scores[max_Coherence])
 
 						lsi_model = LsiModel(
-							corpus=corpus_tfidf, id2word=dictionary, num_topics=100
+							corpus=corpus_tfidf, id2word=dictionary, num_topics=35
 						)
 						print(
 							"Derivation of Term Matrix T of Training Document Word Stems: ",
