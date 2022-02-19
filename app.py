@@ -1,3 +1,5 @@
+from collections import defaultdict
+from gensim.test.utils import common_corpus, common_dictionary
 import streamlit as st
 import os
 os.environ["LI_AT_COOKIE"] = "AQEDAThq-1kAnAiEAAABfrqIoWkAAAF-3pUlaVYAIkwmkpPBV94WZto-u0oRT51UCe3As_AF6HjSt2ixjjZT5gXvKlfGu8_LSRoIPFrxWg93zfJJI3IpecLZBzbAf52ip3IN4xAQPyHTd6bwvjsMbbsW"
@@ -834,131 +836,145 @@ def main():
 
 							return " ".join(token_words)
 
-						documents_train = pd.read_csv(
-							"datascraptest.csv", error_bad_lines=False
-						)
-						train_text = documents_train["Description"].apply(
-							preProcessPipeline
-						)
+						# documents_train = pd.read_csv(
+						# 	"datascraptest.csv", error_bad_lines=False
+						# )					
+
+						# train_text = documents_train["Description"]
+
+						train_text = [
+							"Human machine interface for lab abc computer applications",
+							"A survey of user opinion of computer system response time",
+							"The EPS user interface management system",
+							"System and human system engineering testing of EPS",
+							"Relation of user perceived response time to error measurement",
+							"The generation of random binary unordered trees",
+							"The intersection graph of paths in trees",
+							"Graph minors IV Widths of trees and well quasi ordering",
+							"Graph minors A survey",
+						]
 						documents_test = pd.read_csv(
 							"templatecv.csv", error_bad_lines=False)
 						test_text = documents_test["cv_desc"].apply(
 							preProcessPipeline
 						)
 
-						nltk_tokens = [nltk.word_tokenize(
-							i) for i in train_text]
-						y = nltk_tokens
+						# nltk_tokens = [nltk.word_tokenize(
+						# 	i) for i in train_text]
+						# y = nltk_tokens
 
-						dictionary = gensim.corpora.Dictionary(y)
-						text = y
+						# remove common words and tokenize
+						stoplist = set('for a of the and to in'.split())
+						texts = [
+							[word for word in document.lower().split() if word not in stoplist]
+							for document in train_text
+						]
 
-						corpus = [dictionary.doc2bow(i) for i in text]
-						tfidf = gensim.models.TfidfModel(
-							corpus, smartirs="npu")
-						corpus_tfidf = tfidf[corpus]
+						# remove words that appear only once
+						frequency = defaultdict(int)
+						for text in texts:
+							for token in text:
+								frequency[token] += 1
 
-						#bmemilih num_topics optimal sesuai topic coherence
-						
-						coherence_scores = []
-						# for loop 2 until 12
-						
+						texts = [
+							[token for token in text if frequency[token] > 1]
+							for text in texts
+						]
 
-						for i in range(2, 12):
+						dictionary = corpora.Dictionary(texts)
+						corpus = [dictionary.doc2bow(text) for text in texts]
+
+						#Memilih num_topics optimal sesuai topic coherence						
+						# coherence_scores = []												
+						# dict_coherence = {}					
+						# for i in range(2, 12):
 							
-							lsa_model = LsiModel(corpus=corpus, num_topics=i, id2word = dictionary)
-							coherence_model = CoherenceModel(model=lsa_model, texts=y, dictionary=dictionary, coherence='c_v')
-							coherence_lsa = coherence_model.get_coherence()
-							st.write(i)
-							st.write("coherence :",str(coherence_lsa))
-							coherence_scores.append(coherence_lsa)
+						# 	lsa_model = LsiModel(corpus=corpus, num_topics=i, id2word = dictionary)
+						# 	coherence_model = CoherenceModel(model=lsa_model, texts=texts, dictionary=dictionary, coherence='c_v')
+						# 	coherence_lsa = coherence_model.get_coherence()
+						# 	st.write(i)
+						# 	st.write("coherence :",str(coherence_lsa))									
+						# 	dict_coherence[i] = coherence_lsa
+						# 	coherence_scores.append(coherence_lsa)
+
+						# 	chart_data = pd.DataFrame(
+						# 	coherence_scores,
+						# 	columns=['coherence_score'])
+
+						# 	st.line_chart(chart_data)	
+						# 	st.write(dict_coherence)				
 						
-						# for m, cv in zip(num_topics, coherence_scores):
-						# 		st.write("Num Topics =", m, "has Coherence Value of", round(cv, 3))
-# 						short paling besar input ke num_topics=bigest
-
-						#mengambil nilai dalam array
-						max_Coherence = np.argmax(coherence_scores)
-
-						st.write("numb of topic:",max_Coherence)
-# 							st.write("best coherence score:",coherence_scores[max_Coherence])
+						# max_Coherence_key = max(dict_coherence, key=dict_coherence.get)						
+						# st.write("max key:",max_Coherence_key)
+						
 
 						lsi_model = LsiModel(
-							corpus=corpus_tfidf, id2word=dictionary, num_topics=6
-						)
-						print(
-							"Derivation of Term Matrix T of Training Document Word Stems: ",
-							lsi_model.get_topics(),
-						)
-						# Derivation of Term Document Matrix of Training Document Word Stems = M' x [Derivation of T]
-						print(
-							"LSI Vectors of Training Document Word Stems: ",
-							[
-								lsi_model[document_word_stems]
-								for document_word_stems in corpus
-							],
-						)
-						cosine_similarity_matrix = similarities.MatrixSimilarity(
-							lsi_model[corpus]
-						)
+							corpus=corpus, id2word=dictionary, num_topics=2
+						)															
+						
+						doc = "Human computer interaction"
+						vec_bow = dictionary.doc2bow(doc.lower().split())
+						vector_lsi_test = lsi_model[vec_bow]
 
-						word_tokenizer = nltk.tokenize.WordPunctTokenizer()
-						words = word_tokenizer.tokenize(test_text[0])
+						st.text("Dimaaaaas")
+						st.text(doc.lower().split())
+						st.text(vector_lsi_test)
 
-						vector_lsi_test = lsi_model[dictionary.doc2bow(
-							words)]
+						index = similarities.MatrixSimilarity(lsi_model[corpus])
+						
+						cosine_similarities_test = index[vector_lsi_test]
+						# st.text(list(enumerate(cosine_similarities_test)))  # print (document_number, document_similarity) 2-tuples
 
-						cosine_similarities_test = cosine_similarity_matrix[
-							vector_lsi_test
-						]
-					
-						most_similar_document_test = train_text[
-							np.argmax(cosine_similarities_test)
-						]
+						sims = sorted(enumerate(cosine_similarities_test), key=lambda item: -item[1])
+						for doc_position, doc_score in sims:
+							 st.text(str(doc_score)+" "+train_text[doc_position])							 
+						# most_similar_document_test = train_text[
+						# 	np.argmax(cosine_similarities_test)
+						# ]
 													
-						#Mengubah nilai cosine float ke persentase
-						cst1 = cosine_similarities_test*int(100)
-						cst = cst1.astype(int)
+						# #Mengubah nilai cosine float ke persentase
+						# cst1 = cosine_similarities_test*int(100)
+						# cst = cst1.astype(int)
 
-						cst_terurut = sorted(
-							cosine_similarities_test, reverse=True)
+						# cst_terurut = sorted(
+						# 	cosine_similarities_test, reverse=True)
 
-						iklan = cosine_similarities_test.argsort(
-						)[-jumlah:][::-1]
+						# iklan = cosine_similarities_test.argsort(
+						# )[-jumlah:][::-1]
 
-						def generator_cosines(iklan):
-							for i in iklan:
-								yield i
+						# def generator_cosines(iklan):
+						# 	for i in iklan:
+						# 		yield i
 
-						# print data awal di csv
-						for i in iklan:
-							st.write(
-								"Similarity Level Between CV and Ads :", f"{cst[i]}","%"
-							)
-							st.write(
-								"Post Date :", f"{documents_train['Date'][i]}\n"
-							)
-							st.write(
-								"Company Name :",
-								f"{documents_train['Company Name'][i]}\n",
-							)
-							st.write(
-								"Job Title :",
-								f"{documents_train['Job_Title'][i]}\n",
-							)
-							st.write(
-								"Job Description :",
-								f"{documents_train['Description'][i]}\n",
-							)
-							st.write(
-								"Job Location :", f"{documents_train['Location'][i]}\n"
-							)
-							st.write(
-								"Link Ads :",
-								f"{documents_train['Link'][i]}\n",
-							)
+						# # print data awal di csv
+						# for i in iklan:
+						# 	st.write(
+						# 		"Similarity Level Between CV and Ads :", f"{cst[i]}","%"
+						# 	)
+						# 	st.write(
+						# 		"Post Date :", f"{documents_train['Date'][i]}\n"
+						# 	)
+						# 	st.write(
+						# 		"Company Name :",
+						# 		f"{documents_train['Company Name'][i]}\n",
+						# 	)
+						# 	st.write(
+						# 		"Job Title :",
+						# 		f"{documents_train['Job_Title'][i]}\n",
+						# 	)
+						# 	st.write(
+						# 		"Job Description :",
+						# 		f"{documents_train['Description'][i]}\n",
+						# 	)
+						# 	st.write(
+						# 		"Job Location :", f"{documents_train['Location'][i]}\n"
+						# 	)
+						# 	st.write(
+						# 		"Link Ads :",
+						# 		f"{documents_train['Link'][i]}\n",
+						# 	)
 				
-							st.markdown("""---""")
+						# 	st.markdown("""---""")
 
 					except:
 						results = "Not Found"
