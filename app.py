@@ -688,7 +688,7 @@ def main():
 # 							st.write("best coherence score:",coherence_scores[max_Coherence])
 
 							lsi_model = LsiModel(
-								corpus=corpus_tfidf, id2word=dictionary, num_topics=35
+								corpus=corpus_tfidf, id2word=dictionary, num_topics=30
 							)
 							print(
 								"Derivation of Term Matrix T of Training Document Word Stems: ",
@@ -909,7 +909,7 @@ def main():
 # 							st.write("best coherence score:",coherence_scores[max_Coherence])
 
 						lsi_model = LsiModel(
-							corpus=corpus_tfidf, id2word=dictionary, num_topics=35
+							corpus=corpus_tfidf, id2word=dictionary, num_topics=30
 						)
 						print(
 							"Derivation of Term Matrix T of Training Document Word Stems: ",
@@ -988,8 +988,6 @@ def main():
 					except:
 						results = "Not Found"
 				
-
-
 			elif task == "CV Template":
 				st.subheader("Download CV ")
 					# st.subheader("CV Writing Guide")
