@@ -668,12 +668,13 @@ def main():
 
 							#bmemilih num_topics optimal sesuai topic coherence
 						
-							k_topics = [5,10,15,20,25,30,35,40,45,50]
+							k_topics = [5,10,15,20,25,30,35,40,45,50,100,200,1000]
 							coherence_scores = []
 
 							for i in k_topics:
 								lsa_model = LsiModel(corpus=corpus, num_topics=i, id2word = dictionary)
-								coherence_model = CoherenceModel(model=lsa_model, texts=y, dictionary=dictionary, coherence='u_mass')
+# 								coherence_model = CoherenceModel(model=lsa_model, texts=y, dictionary=dictionary, coherence='u_mass')
+								coherence_model = CoherenceModel(model=lsa_model, corpus=corpus, dictionary=dictionary, coherence='u_mass')
 								coherence_lsa = coherence_model.get_coherence()
 
 								coherence_scores.append(coherence_lsa)
@@ -889,12 +890,12 @@ def main():
 						corpus_tfidf = tfidf[corpus]
 
 						#bmemilih num_topics optimal sesuai topic coherence
-						k_topics = [5,10,15,20,25,30,35,40,45,50]
+						k_topics = [5,10,15,20,25,30,35,40,45,50,100,200,1000]
 						coherence_scores = []
 
 						for i in k_topics:
 							lsa_model = LsiModel(corpus=corpus, num_topics=i, id2word = dictionary)
-							coherence_model = CoherenceModel(model=lsa_model, texts=y, dictionary=dictionary, coherence='u_mass')
+							coherence_model = CoherenceModel(model=lsa_model, corpus=corpus, dictionary=dictionary, coherence='u_mass')
 							coherence_lsa = coherence_model.get_coherence()
 
 							coherence_scores.append(coherence_lsa)
