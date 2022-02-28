@@ -673,7 +673,7 @@ def main():
 
 							for i in k_topics:
 								lsa_model = LsiModel(corpus=corpus, num_topics=i, id2word = dictionary)
-								coherence_model = CoherenceModel(model=lsa_model, texts=y, dictionary=dictionary, coherence='c_v')
+								coherence_model = CoherenceModel(model=lsa_model, texts=y, dictionary=dictionary, coherence='u_mass')
 								coherence_lsa = coherence_model.get_coherence()
 
 								coherence_scores.append(coherence_lsa)
@@ -894,7 +894,7 @@ def main():
 
 						for i in k_topics:
 							lsa_model = LsiModel(corpus=corpus, num_topics=i, id2word = dictionary)
-							coherence_model = CoherenceModel(model=lsa_model, texts=y, dictionary=dictionary, coherence='c_v')
+							coherence_model = CoherenceModel(model=lsa_model, texts=y, dictionary=dictionary, coherence='u_mass')
 							coherence_lsa = coherence_model.get_coherence()
 
 							coherence_scores.append(coherence_lsa)
