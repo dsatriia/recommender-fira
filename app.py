@@ -668,7 +668,7 @@ def main():
 
 							#bmemilih num_topics optimal sesuai topic coherence
 						
-							k_topics = [2,5,10,15,20,25,30]
+							k_topics = [1,2,3,4,5,6,7,8,9,10,15,20,25,30]
 							coherence_scores = []
 
 							for i in k_topics:
@@ -678,8 +678,8 @@ def main():
 
 								coherence_scores.append(coherence_lsa)
 
-								for m, cv in zip(k_topics, coherence_scores):
-									st.write("Num Topics =", m, "has Coherence Value of", round(cv, 3))
+							for m, cv in zip(k_topics, coherence_scores):
+								st.write("Num Topics =", m, "has Coherence Value of", round(cv, 3))
 	# # 						short paling besar input ke num_topics=bigest
 
 							#mengambil nilai dalam array
@@ -899,8 +899,8 @@ def main():
 
 							coherence_scores.append(coherence_lsa)
 						
-							for m, cv in zip(k_topics, coherence_scores):
-    								st.write("Num Topics =", m, "has Coherence Value of", round(cv, 3))
+						for m, cv in zip(k_topics, coherence_scores):
+    							st.write("Num Topics =", m, "has Coherence Value of", round(cv, 3))
 # # 						short paling besar input ke num_topics=bigest
 
 						#mengambil nilai dalam array
