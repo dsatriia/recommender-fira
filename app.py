@@ -836,23 +836,23 @@ def main():
 
 							return " ".join(token_words)
 
-						# documents_train = pd.read_csv(
-						# 	"datascraptest.csv", error_bad_lines=False
-						# )					
+						documents_train = pd.read_csv(
+							"datascraptest.csv", error_bad_lines=False
+						)					
 
-						# train_text = documents_train["Description"]
+						train_text = documents_train["Description"]
 
-						train_text = [
-							"Human machine interface for lab abc computer applications",
-							"A survey of user opinion of computer system response time",
-							"The EPS user interface management system",
-							"System and human system engineering testing of EPS",
-							"Relation of user perceived response time to error measurement",
-							"The generation of random binary unordered trees",
-							"The intersection graph of paths in trees",
-							"Graph minors IV Widths of trees and well quasi ordering",
-							"Graph minors A survey",
-						]
+						# train_text = [
+						# 	"Human machine interface for lab abc computer applications",
+						# 	"A survey of user opinion of computer system response time",
+						# 	"The EPS user interface management system",
+						# 	"System and human system engineering testing of EPS",
+						# 	"Relation of user perceived response time to error measurement",
+						# 	"The generation of random binary unordered trees",
+						# 	"The intersection graph of paths in trees",
+						# 	"Graph minors IV Widths of trees and well quasi ordering",
+						# 	"Graph minors A survey",
+						# ]
 						documents_test = pd.read_csv(
 							"templatecv.csv", error_bad_lines=False)
 						test_text = documents_test["cv_desc"].apply(
@@ -888,7 +888,7 @@ def main():
 						coherence_scores = []												
 						dict_coherence = {}			
 
-						k_topics = [2]
+						k_topics = [5,10,15,20,25,30,35,40,45,50,100,200,1000]
 						for i in k_topics:
 							
 							lsa_model = LsiModel(corpus=corpus, num_topics=i, id2word = dictionary)
@@ -914,7 +914,7 @@ def main():
 							corpus=corpus, id2word=dictionary, num_topics=max_Coherence_key
 						)															
 						
-						doc = "human computer interaction"
+						doc = "Education Section: information system GPA 3.80, Experience Section:  Coded and develop mobile aplication , develope tracking system using PHP and CSS, build bot chat, Skills Section:  php, java, sql, python"
 						vec_bow = dictionary.doc2bow(doc.lower().split())
 						vector_lsi_test = lsi_model[vec_bow]
 
