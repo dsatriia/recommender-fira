@@ -681,17 +681,17 @@ def main():
 
 							for m, cv in zip(k_topics, coherence_scores):
 								st.write("Num Topics =", m, "has Coherence Value of", round(cv, 3))
-	# # 						short paling besar input ke num_topics=bigest
+	
+							min_coherence_value = min(dict_coherence.values())
+							min_coherence_key = min(dict_coherence, key=dict_coherence.get)		
 
-							#mengambil nilai dalam array
-							min_Coherence = np.argmin(coherence_scores)
-
-							st.write("numb of topic:",min_Coherence)
-							st.write("best coherence score:",coherence_scores[min_Coherence])
+							st.write("numb of topic:", min_coherence_key)
+							st.write("best coherence score:", min_coherence_value)
 
 							lsi_model = LsiModel(
-								corpus=corpus_tfidf, id2word=dictionary, num_topics=min_Coherence
+								corpus=corpus_tfidf, id2word=dictionary, num_topics=min_coherence_key
 							)
+							
 							print(
 								"Derivation of Term Matrix T of Training Document Word Stems: ",
 								lsi_model.get_topics(),
