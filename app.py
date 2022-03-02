@@ -670,20 +670,21 @@ def main():
 						
 							k_topics = [5,10,15,20,25,30,35,40,45,50,100,200,1000]
 							coherence_scores = []
+							dict_coherence = {}	
 
 							for i in k_topics:
 								lsa_model = LsiModel(corpus=corpus, num_topics=i, id2word = dictionary)
-# 								coherence_model = CoherenceModel(model=lsa_model, texts=y, dictionary=dictionary, coherence='u_mass')
 								coherence_model = CoherenceModel(model=lsa_model, corpus=corpus, dictionary=dictionary, coherence='u_mass')
 								coherence_lsa = coherence_model.get_coherence()
-
+								
+								dict_coherence[i] = coherence_lsa
 								coherence_scores.append(coherence_lsa)
-
+							
 							for m, cv in zip(k_topics, coherence_scores):
 								st.write("Num Topics =", m, "has Coherence Value of", round(cv, 3))
-	
+
 							min_coherence_value = min(dict_coherence.values())
-							min_coherence_key = min(dict_coherence, key=dict_coherence.get)		
+							min_coherence_key = min(dict_coherence, key=dict_coherence.get)	
 
 							st.write("numb of topic:", min_coherence_key)
 							st.write("best coherence score:", min_coherence_value)
@@ -723,8 +724,8 @@ def main():
 							]
 							 							
 							#Mengubah nilai cosine float ke persentase
-							cst1 = cosine_similarities_test*int(100)
-							cst = cst1.astype(int)
+							cst1 = cosine_similarities_test*100																					
+							cst = cst1
 
 							cst_terurut = sorted(
 								cosine_similarities_test, reverse=True)
@@ -738,8 +739,9 @@ def main():
 
 							# print data awal di csv
 							for i in iklan:
+								percentage = "%.2f" % cst1[i]
 								st.write(
-									"Similarity Level Between CV and Ads :", f"{cst[i]}","%"
+									"Similarity Level Between CV and Ads :", f"{percentage}","%"
 								)
 								st.write(
 									"Post Date :", f"{documents_train['Date'][i]}\n"
@@ -945,8 +947,8 @@ def main():
 						]
 													
 						#Mengubah nilai cosine float ke persentase
-						cst1 = cosine_similarities_test*int(100)
-						cst = cst1.astype(int)
+						cst1 = cosine_similarities_test*100																					
+						cst = cst1
 
 						cst_terurut = sorted(
 							cosine_similarities_test, reverse=True)
@@ -960,8 +962,9 @@ def main():
 
 						# print data awal di csv
 						for i in iklan:
+							percentage = "%.2f" % cst1[i]
 							st.write(
-								"Similarity Level Between CV and Ads :", f"{cst[i]}","%"
+								"Similarity Level Between CV and Ads :", f"{percentage}","%"
 							)
 							st.write(
 								"Post Date :", f"{documents_train['Date'][i]}\n"
