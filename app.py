@@ -2,7 +2,7 @@ from collections import defaultdict
 from gensim.test.utils import common_corpus, common_dictionary
 import streamlit as st
 import os
-os.environ["LI_AT_COOKIE"] = "AQEDAThq-1kAnAiEAAABfrqIoWkAAAF-3pUlaVYAIkwmkpPBV94WZto-u0oRT51UCe3As_AF6HjSt2ixjjZT5gXvKlfGu8_LSRoIPFrxWg93zfJJI3IpecLZBzbAf52ip3IN4xAQPyHTd6bwvjsMbbsW"
+os.environ["LI_AT_COOKIE"] = "AQEDATnUOO0Dc4zEAAABfsSWUIEAAAF_eY7RMU4AeYniMx_aEBojpK3azPw3Uwqq7xLXXcs_1Jh4NIfR0NmGeTGWgLHC3s7T01FqgRK6laDX6OlsLotw7b_maq6TI0ZEp1CzBmJjsVR3m-jGKXIw9GGx"
 
 #packages input cv 
 import csv #Dengan modul csv untuk beralih ke suatu baris dan mengaksesnya
