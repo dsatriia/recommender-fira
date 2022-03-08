@@ -1,3 +1,5 @@
+import sys
+from collections import defaultdict
 import streamlit as st
 import os
 os.environ["LI_AT_COOKIE"] = "AQEDATnUOO0Dc4zEAAABfsSWUIEAAAF-6KLUgU4AW5AIM3Sz6xWDl5-pPahj24qNQ_SLioHfQcFGkMWn6nAXc9Q13j1j4LuOnZAvyf3zas3tkwG3j66to5ofMC2HuAyDD-g5S26aaWEkB3kv7OHZMx1Q"
@@ -645,36 +647,56 @@ def main():
 							documents_train = pd.read_csv(
 								"datascraptest.csv", error_bad_lines=False
 							)
-							train_text = documents_train["Description"].apply(
-								preProcessPipeline
-							)
+							train_text = documents_train["Description"]							
+							# train_text = [
+							# 	"Human machine interface for lab abc computer applications",
+							# 	"A survey of user opinion of computer system response time",
+							# 	"The EPS user interface management system",
+							# 	"System and human system engineering testing of EPS",
+							# 	"Relation of user perceived response time to error measurement",
+							# 	"The generation of random binary unordered trees",
+							# 	"The intersection graph of paths in trees",
+							# 	"Graph minors IV Widths of trees and well quasi ordering",
+							# 	"Graph minors A survey",
+							# ]
+
 							documents_test = pd.read_csv(
 								"templatecv.csv", error_bad_lines=False)
-							test_text = documents_test["cv_desc"].apply(
-								preProcessPipeline
-							)
+							test_text = documents_test["cv_desc"]
 
-							nltk_tokens = [nltk.word_tokenize(
-								i) for i in train_text]
-							y = nltk_tokens
+							documents_test = pd.read_csv(
+							"templatecv.csv", error_bad_lines=False)
+							test_text = documents_test["cv_desc"]
 
-							dictionary = gensim.corpora.Dictionary(y)
-							text = y
+							stoplist = set('for a of the and to in'.split())
+							texts = [
+								[word for word in document.lower().split() if word not in stoplist]
+								for document in train_text
+							]
 
-							corpus = [dictionary.doc2bow(i) for i in text]
-							tfidf = gensim.models.TfidfModel(
-								corpus, smartirs="npu")
-							corpus_tfidf = tfidf[corpus]
+							# remove words that appear only once
+							frequency = defaultdict(int)
+							for text in texts:
+								for token in text:
+									frequency[token] += 1
 
-							#bmemilih num_topics optimal sesuai topic coherence
-						
-							k_topics = [5,10,15,20,25,30,35,40,45,50,100,200,1000]
+							texts = [
+								[token for token in text if frequency[token] > 1]
+								for text in texts
+							]
+
+							dictionary = corpora.Dictionary(texts)
+							corpus = [dictionary.doc2bow(text) for text in texts]
+
+							#Memilih num_topics optimal sesuai topic coherence																			
 							coherence_scores = []
 							dict_coherence = {}	
 
+							k_topics = [5,10,15,20,25,30,35,40,45,50,100,200,1000]
 							for i in k_topics:
+
 								lsa_model = LsiModel(corpus=corpus, num_topics=i, id2word = dictionary)
-								coherence_model = CoherenceModel(model=lsa_model, corpus=corpus, dictionary=dictionary, coherence='u_mass')
+								coherence_model = CoherenceModel(model=lsa_model, texts=texts, dictionary=dictionary, coherence='c_v')
 								coherence_lsa = coherence_model.get_coherence()
 								
 								dict_coherence[i] = coherence_lsa
@@ -683,59 +705,36 @@ def main():
 							for m, cv in zip(k_topics, coherence_scores):
 								st.write("Num Topics =", m, "has Coherence Value of", round(cv, 3))
 
-							min_coherence_value = min(dict_coherence.values())
-							min_coherence_key = min(dict_coherence, key=dict_coherence.get)	
+							max_Coherence_value = max(dict_coherence.values())
+							max_Coherence_key = max(dict_coherence, key=dict_coherence.get)	
 
-							st.write("numb of topic:", min_coherence_key)
-							st.write("best coherence score:", min_coherence_value)
+							st.write("numb of topic:", max_Coherence_key)
+							st.write("best coherence score:", max_Coherence_value)
 
 							lsi_model = LsiModel(
-								corpus=corpus_tfidf, id2word=dictionary, num_topics=min_coherence_key
+								corpus=corpus, id2word=dictionary, num_topics=max_Coherence_key
 							)
 							
-							print(
-								"Derivation of Term Matrix T of Training Document Word Stems: ",
-								lsi_model.get_topics(),
-							)
-							# Derivation of Term Document Matrix of Training Document Word Stems = M' x [Derivation of T]
-							print(
-								"LSI Vectors of Training Document Word Stems: ",
-								[
-									lsi_model[document_word_stems]
-									for document_word_stems in corpus
-								],
-							)
-							cosine_similarity_matrix = similarities.MatrixSimilarity(
-								lsi_model[corpus]
-							)
+							doc = test_text[0]						
+							# doc = "Human computer interaction"
+							vec_bow = dictionary.doc2bow(doc.lower().split())
+							vector_lsi_test = lsi_model[vec_bow]						
 
-							word_tokenizer = nltk.tokenize.WordPunctTokenizer()
-							words = word_tokenizer.tokenize(test_text[0])
+							index = similarities.MatrixSimilarity(lsi_model[corpus])
+							cosine_similarities_test = index[vector_lsi_test]
 
-							vector_lsi_test = lsi_model[dictionary.doc2bow(
-								words)]
+							# Hanya untuk debug, menampilkan keseluruhan hasil
+							# sims = sorted(enumerate(cosine_similarities_test), key=lambda item: -item[1])
+							# for doc_position, doc_score in sims:
+							# 	st.text(str(doc_score)+" "+train_text[doc_position])	
 
-							cosine_similarities_test = cosine_similarity_matrix[
-								vector_lsi_test
-							]
-						
-							most_similar_document_test = train_text[
-								np.argmax(cosine_similarities_test)
-							]
-							 							
-							#Mengubah nilai cosine float ke persentase
 							cst1 = cosine_similarities_test*100																					
 							cst = cst1
 
-							cst_terurut = sorted(
-								cosine_similarities_test, reverse=True)
+							cst_terurut = sorted(cosine_similarities_test, reverse=True)
 
 							iklan = cosine_similarities_test.argsort(
-							)[-jumlah:][::-1]
-
-							def generator_cosines(iklan):
-								for i in iklan:
-									yield i
+							)[-jumlah:][::-1]						
 
 							# print data awal di csv
 							for i in iklan:
@@ -767,6 +766,7 @@ def main():
 								)
 					
 								st.markdown("""---""")
+							
 
 						except:
 							results = "Not Found"
@@ -870,35 +870,52 @@ def main():
 						documents_train = pd.read_csv(
 							"datascraptest.csv", error_bad_lines=False
 						)
-						train_text = documents_train["Description"].apply(
-							preProcessPipeline
-						)
+						train_text = documents_train["Description"]
+						# train_text = [
+						# 	"Human machine interface for lab abc computer applications",
+						# 	"A survey of user opinion of computer system response time",
+						# 	"The EPS user interface management system",
+						# 	"System and human system engineering testing of EPS",
+						# 	"Relation of user perceived response time to error measurement",
+						# 	"The generation of random binary unordered trees",
+						# 	"The intersection graph of paths in trees",
+						# 	"Graph minors IV Widths of trees and well quasi ordering",
+						# 	"Graph minors A survey",
+						# ]
+
 						documents_test = pd.read_csv(
 							"templatecv.csv", error_bad_lines=False)
-						test_text = documents_test["cv_desc"].apply(
-							preProcessPipeline
-						)
+						test_text = documents_test["cv_desc"]
 
-						nltk_tokens = [nltk.word_tokenize(
-							i) for i in train_text]
-						y = nltk_tokens
+						stoplist = set('for a of the and to in'.split())
+						texts = [
+							[word for word in document.lower().split() if word not in stoplist]
+							for document in train_text
+						]
 
-						dictionary = gensim.corpora.Dictionary(y)
-						text = y
+						# remove words that appear only once
+						frequency = defaultdict(int)
+						for text in texts:
+							for token in text:
+								frequency[token] += 1
 
-						corpus = [dictionary.doc2bow(i) for i in text]
-						tfidf = gensim.models.TfidfModel(
-							corpus, smartirs="npu")
-						corpus_tfidf = tfidf[corpus]
+						texts = [
+							[token for token in text if frequency[token] > 1]
+							for text in texts
+						]
 
-						#bmemilih num_topics optimal sesuai topic coherence
-						k_topics = [5,10,15,20,25,30,35,40,45,50,100,200,1000]
+						dictionary = corpora.Dictionary(texts)
+						corpus = [dictionary.doc2bow(text) for text in texts]
+
+						#Memilih num_topics optimal sesuai topic coherence						
 						coherence_scores = []
 						dict_coherence = {}	
 
+						k_topics = [5,10,15,20,25,30,35,40,45,50,100,200,1000]
 						for i in k_topics:
+
 							lsa_model = LsiModel(corpus=corpus, num_topics=i, id2word = dictionary)
-							coherence_model = CoherenceModel(model=lsa_model, corpus=corpus, dictionary=dictionary, coherence='u_mass')
+							coherence_model = CoherenceModel(model=lsa_model, texts=texts, dictionary=dictionary, coherence='c_v')
 							coherence_lsa = coherence_model.get_coherence()
 							
 							dict_coherence[i] = coherence_lsa
@@ -907,58 +924,36 @@ def main():
 						for m, cv in zip(k_topics, coherence_scores):
 							st.write("Num Topics =", m, "has Coherence Value of", round(cv, 3))
 
-						min_coherence_value = min(dict_coherence.values())
-						min_coherence_key = min(dict_coherence, key=dict_coherence.get)		
+						max_Coherence_value = max(dict_coherence.values())
+						max_Coherence_key = max(dict_coherence, key=dict_coherence.get)						
 
-						st.write("numb of topic:", min_coherence_key)
-						st.write("best coherence score:", min_coherence_value)
-
+						st.write("numb of topic:", max_Coherence_key)
+						st.write("best coherence score:", max_Coherence_value)
+						
 						lsi_model = LsiModel(
-							corpus=corpus_tfidf, id2word=dictionary, num_topics=min_coherence_key
-						)
-						print(
-							"Derivation of Term Matrix T of Training Document Word Stems: ",
-							lsi_model.get_topics(),
-						)
-						# Derivation of Term Document Matrix of Training Document Word Stems = M' x [Derivation of T]
-						print(
-							"LSI Vectors of Training Document Word Stems: ",
-							[
-								lsi_model[document_word_stems]
-								for document_word_stems in corpus
-							],
-						)
-						cosine_similarity_matrix = similarities.MatrixSimilarity(
-							lsi_model[corpus]
+							corpus=corpus, id2word=dictionary, num_topics=max_Coherence_key
 						)
 
-						word_tokenizer = nltk.tokenize.WordPunctTokenizer()
-						words = word_tokenizer.tokenize(test_text[0])
+						doc = test_text[0]						
+						# doc = "Human computer interaction"
+						vec_bow = dictionary.doc2bow(doc.lower().split())
+						vector_lsi_test = lsi_model[vec_bow]						
 
-						vector_lsi_test = lsi_model[dictionary.doc2bow(
-							words)]
+						index = similarities.MatrixSimilarity(lsi_model[corpus])
+						cosine_similarities_test = index[vector_lsi_test]
 
-						cosine_similarities_test = cosine_similarity_matrix[
-							vector_lsi_test
-						]
-					
-						most_similar_document_test = train_text[
-							np.argmax(cosine_similarities_test)
-						]
-													
-						#Mengubah nilai cosine float ke persentase
+						# Hanya untuk debug, menampilkan keseluruhan hasil
+						# sims = sorted(enumerate(cosine_similarities_test), key=lambda item: -item[1])
+						# for doc_position, doc_score in sims:
+						# 	st.text(str(doc_score)+" "+train_text[doc_position])	
+
 						cst1 = cosine_similarities_test*100																					
 						cst = cst1
 
-						cst_terurut = sorted(
-							cosine_similarities_test, reverse=True)
+						cst_terurut = sorted(cosine_similarities_test, reverse=True)
 
 						iklan = cosine_similarities_test.argsort(
-						)[-jumlah:][::-1]
-
-						def generator_cosines(iklan):
-							for i in iklan:
-								yield i
+						)[-jumlah:][::-1]						
 
 						# print data awal di csv
 						for i in iklan:
@@ -990,6 +985,7 @@ def main():
 							)
 				
 							st.markdown("""---""")
+														
 
 					except:
 						results = "Not Found"
